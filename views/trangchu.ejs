@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>soket io</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/socket.io/socket.io.js"></script>
+
+</head>
+<style>
+    .boxChat {
+        display: contents;
+        width: 100%;
+    }
+    
+    .listUser {
+        width: 40%;
+        float: left;
+    }
+    
+    .chat {
+        width: 60%;
+        float: right
+    }
+</style>
+
+<body>
+
+    <form action="" id="register">
+        <input type="text" name="" id="test" value="">
+        <button type="submit" class="submit">submit</button>
+    </form>
+
+    <div class="boxChat">
+        <div class="listUser">
+            <ul class="ListUserOnline">
+
+            </ul>
+        </div>
+        <div class="chat">
+            xin chào <span class="userName"> </span>
+            <div>chat</div>
+        </div>
+        <div>
+            <form action="">
+                <input type="text" name="" id="contents">
+                <button> gửi</button>
+            </form>
+        </div>
+    </div>
+
+    <div> <button class="logout">logout</button></div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $("#register").show()
+    $(".boxChat").hide();
+    var socket = io("http://localhost:3000");
+    socket.on("server-send-register-fail", function() {
+        alert('lỗi đăng ký')
+    })
+
+
+    socket.on("server-send-register-success", function(data) {
+        $(".userName").html(data)
+        $("#register").hide()
+        $(".boxChat").show();
+    })
+
+
+    socket.on("server-send-list-user", function(data) {
+        var html = '';
+        data.forEach(i => {
+            $('.ListUserOnline').append("<li>" + i + "</li>")
+        });
+        $
+    })
+
+
+    $(".logout").click(function(e) {
+        e.preventDefault()
+        socket.emit("Client-send-logout");
+    })
+
+    $('.submit').click(function(e) {
+        var test = $('#test').val()
+        e.preventDefault()
+        socket.emit("Client-send-data", test);
+    })
+</script>
+
+</html>
